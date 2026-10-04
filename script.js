@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Contact form -> FormSubmit (emails CONTACT_EMAIL)
   const form = document.getElementById('contactForm');
+  if (!form) return;
   const note = document.getElementById('formNote');
   const btn = form.querySelector('button[type="submit"]');
   const setNote = (msg, cls) => { note.textContent = msg; note.className = 'form__note' + (cls ? ' ' + cls : ''); };
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
     if (!data.name.trim() || !/^\S+@\S+\.\S+$/.test(data.email.trim())) {
-      setNote('Please enter your name and a valid email address.', 'form__note--error');
+      setNote('Please add your name and a valid email so we can reach you.', 'form__note--error');
       return;
     }
     btn.disabled = true;
@@ -83,10 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const out = await res.json();
       if (!res.ok || String(out.success) !== 'true') throw new Error(out.message || 'failed');
       form.reset();
-      setNote('Thank you! Your message has been sent. We will reply within one working day.');
+      setNote('Thanks, you are all set! We will send your free plan within one working day.');
     } catch (err) {
       console.error('Contact form failed:', err.message);
-      setNote('Sorry, something went wrong. Please email us at ' + CONTACT_EMAIL + '.', 'form__note--error');
+      setNote('Oops, that did not go through. Please email us at ' + CONTACT_EMAIL + ' instead.', 'form__note--error');
     } finally {
       btn.disabled = false;
     }
